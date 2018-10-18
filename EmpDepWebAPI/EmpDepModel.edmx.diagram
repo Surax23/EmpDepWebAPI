@@ -7,8 +7,6 @@
       <Diagram DiagramId="1cb50db6cf604d2e9bb202d1df4768d6" Name="Diagram1">
         <EntityTypeShape EntityType="EmpDepModel.Department" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="EmpDepModel.Employee" Width="1.5" PointX="2.875" PointY="1.25" IsExpanded="true" />
-        <AssociationConnector Association="EmpDepModel.FK_Employee_ToDepartment" ManuallyRouted="false" >
-        </AssociationConnector>
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

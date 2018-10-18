@@ -53,6 +53,21 @@ namespace EmpDepWebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
 
+        // POST: changeemps
+        /// <summary>
+        /// Изменение сотрудника.
+        /// </summary>
+        /// <param name="value">Измененный сотрудник.</param>
+        /// <returns></returns>
+        [Route("changeemps")]
+        public HttpResponseMessage ChangeEmployee([FromBody]Employee value)
+        {
+            if (emps.ChangeEmployee(value))
+                return Request.CreateResponse(HttpStatusCode.Created);
+            else
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+        }
+
         //// PUT: api/Employee/5
         //public void Put(int id, [FromBody]string value)
         //{

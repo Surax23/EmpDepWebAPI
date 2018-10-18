@@ -7,6 +7,8 @@ namespace EmpDepWebAPI.Models
 {
     public class DepsModel
     {
+        System.Data.Entity.DbSet<Department> dep_list = DBModel.entities.Department;
+
         public DepsModel()
         {
         }
@@ -17,7 +19,7 @@ namespace EmpDepWebAPI.Models
         /// <returns></returns>
         public List<Department> GetDepartments()
         {
-            return DBModel.entities.Department.ToList();
+            return dep_list.ToList();
         }
 
         /// <summary>
@@ -27,7 +29,7 @@ namespace EmpDepWebAPI.Models
         /// <returns></returns>
         public Department GetDepartment(int id)
         {
-            return DBModel.entities.Department.ToList()[id];
+            return dep_list.Where(e => e.Id == id).FirstOrDefault() as Department;
         }
 
         /// <summary>
@@ -35,7 +37,7 @@ namespace EmpDepWebAPI.Models
         /// </summary>
         public bool AddDepartment(Department n)
         {
-            DBModel.entities.Department.Add(new Department()
+            dep_list.Add(new Department()
             {
                 Name = n.Name
             });
@@ -44,17 +46,35 @@ namespace EmpDepWebAPI.Models
         }
 
         /// <summary>
+        /// Изменяет свойства департамента.
+        /// </summary>
+        /// <param name="n">Измененный департамент.</param>
+        /// <returns></returns>
+        public bool ChangeDepartment(Department n)
+        {
+            //DBModel.entities.Department[n.Id]
+            if (dep_list.Where(e => e.Id == n.Id).FirstOrDefault() != null)
+            {
+                DBModel.entities.Department
+                    .Where(e => e.Id == n.Id)
+                    .FirstOrDefault().Name = n.Name;
+                DBModel.entities.SaveChanges();
+                return true;
+            }
+            else
+                return false;
+        }
+
+        /// <summary>
         /// Метод удаляет департамент по идентификатору.
         /// </summary>
         /// <param name="id">Идентификатор департамента.</param>
         public bool DeleteDepartment(int id)
         {
-            if (DBModel.entities.Department.ToList().Count != 0)
+            Department currdep = dep_list.Where(e => e.Id == id).FirstOrDefault();
+            if (dep_list.ToList().Count != 0 && currdep != null)
             {
-                Department tmp = DBModel.entities.Department
-                    .Where(e => e.Id == id)
-                    .FirstOrDefault();
-                DBModel.entities.Department.Remove(tmp);
+                dep_list.Remove(currdep);
                 DBModel.entities.SaveChanges();
                 return true;
             }

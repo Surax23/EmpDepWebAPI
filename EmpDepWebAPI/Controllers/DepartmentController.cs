@@ -41,7 +41,7 @@ namespace EmpDepWebAPI.Controllers
             return Ok(tmp);
         }
 
-        // POST: api/Employee
+        // POST: adddeps
         /// <summary>
         /// Добавляет департамент в таблицу Department.
         /// </summary>
@@ -56,12 +56,22 @@ namespace EmpDepWebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
 
-        //// PUT: api/Employee/5
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
+        // POST: changedeps
+        /// <summary>
+        /// Изменение департамента.
+        /// </summary>
+        /// <param name="value">Измененный департамент.</param>
+        /// <returns></returns>
+        [Route("changedeps")]
+        public HttpResponseMessage ChangeDepartment([FromBody]Department value)
+        {
+            if (deps.ChangeDepartment(value))
+                return Request.CreateResponse(HttpStatusCode.Created);
+            else
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+        }
 
-        // DELETE: delemps/{id}
+        // DELETE: deldeps/{id}
         /// <summary>
         /// Удаляет департамент из таблицы Department.
         /// </summary>

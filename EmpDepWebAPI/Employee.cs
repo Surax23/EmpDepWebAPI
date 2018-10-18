@@ -19,7 +19,5 @@ namespace EmpDepWebAPI
         public Nullable<int> Age { get; set; }
         public Nullable<int> Salary { get; set; }
         public Nullable<int> DepartmentID { get; set; }
-    
-        public virtual Department Department { get; set; }
     }
 }

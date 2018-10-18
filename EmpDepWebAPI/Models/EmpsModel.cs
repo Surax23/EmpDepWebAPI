@@ -7,6 +7,9 @@ namespace EmpDepWebAPI.Models
 {
     public class EmpsModel
     {
+
+        System.Data.Entity.DbSet<Employee> emp_list = DBModel.entities.Employee;
+
         public EmpsModel()
         {
         }
@@ -15,9 +18,10 @@ namespace EmpDepWebAPI.Models
         /// Метод получает всех работников из таблицы.
         /// </summary>
         /// <returns></returns>
-        public List<Employee> GetEmployees()
+        public IEnumerable<Employee> GetEmployees()
         {
-            return DBModel.entities.Employee.ToList();
+            var tmp = emp_list.ToList();
+            return tmp;
         }
 
         /// <summary>
@@ -27,7 +31,7 @@ namespace EmpDepWebAPI.Models
         /// <returns></returns>
         public Employee GetEmployee(int id)
         {
-            return DBModel.entities.Employee.ToList()[id];
+            return emp_list.Where(e => e.Id == id).FirstOrDefault();
         }
 
         /// <summary>
@@ -35,7 +39,7 @@ namespace EmpDepWebAPI.Models
         /// </summary>
         public bool AddEmployee(Employee n)
         {
-            DBModel.entities.Employee.Add(new Employee() {
+            emp_list.Add(new Employee() {
                 Name = n.Name,
                 Age = n.Age,
                 Salary = n.Salary,
@@ -46,19 +50,39 @@ namespace EmpDepWebAPI.Models
         }
 
         /// <summary>
+        /// Изменяет свойства сотрудника.
+        /// </summary>
+        /// <param name="n">Измененный сотрудник.</param>
+        /// <returns></returns>
+        public bool ChangeEmployee(Employee n)
+        {
+            //DBModel.entities.Department[n.Id]
+            Employee newEmp = emp_list
+                    .Where(e => e.Id == n.Id)
+                    .FirstOrDefault();
+            if (newEmp != null)
+            {
+                newEmp.Name = n.Name;
+                newEmp.Age = n.Age;
+                newEmp.Salary = n.Salary;
+                newEmp.DepartmentID = n.DepartmentID;
+                DBModel.entities.SaveChanges();
+                return true;
+            }
+            else
+                return false;
+        }
+
+        /// <summary>
         /// Метод удаляет сотрудника по идентификатору.
         /// </summary>
         /// <param name="id">Идентификатор сотрудника.</param>
         public bool DeleteEmployee(int id)
         {
-            if (DBModel.entities.Employee.ToList().Count != 0)
+            Employee curremp = emp_list.Where(e => e.Id == id).FirstOrDefault();
+            if (emp_list.ToList().Count != 0 && curremp != null)
             {
-                //DBModel.entities.Employee.ToList().RemoveAt(id);
-                Employee tmp = DBModel.entities.Employee
-                    .Where(e => e.Id == id)
-                    .FirstOrDefault();
-                //DBModel.entities.Employee.Attach(tmp);
-                DBModel.entities.Employee.Remove(tmp);
+                DBModel.entities.Employee.Remove(curremp);
                 DBModel.entities.SaveChanges();
                 return true;
             }
